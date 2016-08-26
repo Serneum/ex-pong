@@ -42,13 +42,13 @@ defmodule Pong do
   def reverse_vel(val, vel, size) do
     cond do
       val <= 0 ->
-        if vel < 0 do
+        if vel <= 0 do
           rand_vel
         else
           vel
         end
       val + size >= @limit ->
-        if vel > 0 do
+        if vel >= 0 do
           rand_vel * -1
         else
           vel
