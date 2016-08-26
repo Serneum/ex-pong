@@ -8,7 +8,7 @@ defmodule Pong do
     {:ok, window} = :sdl_window.create('Hello SDL', 10, 10, @width, @height, [])
     {:ok, renderer} = :sdl_renderer.create(window, -1, [:accelerated, :present_vsync])
 
-    ball = %{x: 100, y: 100, x_vel: Ball.rand_vel, y_vel: Ball.rand_vel}
+    ball = %Ball{x: 100, y: 100, x_vel: Ball.rand_vel, y_vel: Ball.rand_vel}
     loop(renderer, ball)
   end
 
