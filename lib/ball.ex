@@ -4,49 +4,25 @@ defmodule Ball do
 
   defstruct [:x, :y, :x_vel, :y_vel]
 
-  def render(renderer, ball) do
+  def render(renderer, %Ball{} = ball) do
     :ok = :sdl_renderer.set_draw_color(renderer, 255, 255, 255, 255)
-    :ok = :sdl_renderer.fill_rect(renderer, %{x: get_x(ball), y: get_y(ball), w: @width, h: @height})
+    :ok = :sdl_renderer.fill_rect(renderer, %{x: ball.x, y: ball.y, w: @width, h: @height})
   end
 
-  def get_x(ball) do
-    Map.get(ball, :x)
+  def update_x(%Ball{} = ball, screen_width) do
+    Map.update!(ball, :x, &(check_bounds(&1, ball.x_vel, @width, screen_width)))
   end
 
-  def get_x_vel(ball) do
-    Map.get(ball, :x_vel)
+  def update_y(%Ball{} = ball, screen_height) do
+    Map.update!(ball, :y, &(check_bounds(&1, ball.y_vel, @height, screen_height)))
   end
 
-  def get_y(ball) do
-    Map.get(ball, :y)
+  def update_x_vel(%Ball{} = ball, screen_width) do
+    Map.update!(ball, :x_vel, &(check_vel(ball.x, &1, @width, screen_width)))
   end
 
-  def get_y_vel(ball) do
-    Map.get(ball, :y_vel)
-  end
-
-  def update_x(ball, screen_width) do
-    x = get_x(ball)
-    x_vel = get_x_vel(ball)
-    Map.get_and_update(ball, :x, fn val -> {val, check_bounds(x, x_vel, @width, screen_width)} end) |> elem(1)
-  end
-
-  def update_y(ball, screen_height) do
-    y = get_y(ball)
-    y_vel = get_y_vel(ball)
-    Map.get_and_update(ball, :y, fn val -> {val, check_bounds(y, y_vel, @height, screen_height)} end) |> elem(1)
-  end
-
-  def update_x_vel(ball, screen_width) do
-    x = get_x(ball)
-    x_vel = get_x_vel(ball)
-    Map.get_and_update(ball, :x_vel, fn val -> {val, check_vel(x, x_vel, @width, screen_width)} end) |> elem(1)
-  end
-
-  def update_y_vel(ball, screen_height) do
-    y = get_y(ball)
-    y_vel = get_y_vel(ball)
-    Map.get_and_update(ball, :y_vel, fn val -> {val, check_vel(y, y_vel, @height, screen_height)} end) |> elem(1)
+  def update_y_vel(%Ball{} = ball, screen_height) do
+    Map.update!(ball, :y_vel, &(check_vel(ball.y, &1, @height, screen_height)))
   end
 
   def check_bounds(val, vel, _, _) when val + vel < 0 do
