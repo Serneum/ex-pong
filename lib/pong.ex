@@ -38,23 +38,16 @@ defmodule Pong do
     val + vel
   end
 
-  def reverse_vel(val, vel, size) do
-    cond do
-      val <= 0 ->
-        if vel <= 0 do
-          rand_vel
-        else
-          vel
-        end
-      val + size >= @limit ->
-        if vel >= 0 do
-          rand_vel * -1
-        else
-          vel
-        end
-      true ->
-        vel
-    end
+  def reverse_vel(val, vel, _) when val <= 0 and vel <= 0 do
+    rand_vel
+  end
+
+  def reverse_vel(val, vel, size) when val + size >= @limit and vel >= 0 do
+    rand_vel * -1
+  end
+
+  def reverse_vel(_, vel, _) do
+    vel
   end
 
   def rand_vel do
