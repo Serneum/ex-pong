@@ -26,17 +26,16 @@ defmodule Pong do
     end
   end
 
-  def new_coord(val, vel, size) do
-    min_val = val + vel
-    max_val = val + vel + size
-    cond do
-      min_val < 0 ->
-        0
-      max_val >= @limit ->
-        @limit - size
-      true ->
-        val + vel
-    end
+  def new_coord(val, vel, _) when val + vel < 0 do
+    0
+  end
+
+  def new_coord(val, vel, size) when val + vel + size >= @limit do
+    @limit - size
+  end
+
+  def new_coord(val, vel, _) do
+    val + vel
   end
 
   def reverse_vel(val, vel, size) do
