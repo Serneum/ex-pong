@@ -2,23 +2,7 @@
 
 **TODO: Add description**
 
-## Installation
+## Running Pong
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
-  1. Add `pong` to your list of dependencies in `mix.exs`:
-
-    ```elixir
-    def deps do
-      [{:pong, "~> 0.1.0"}]
-    end
-    ```
-
-  2. Ensure `pong` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:pong]]
-    end
-    ```
-
+  1. `brew install sdl2 sdl2_image`
+  2. `mix compile`
