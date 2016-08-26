@@ -21,9 +21,9 @@ defmodule Pong do
     case :sdl_events.poll do
       %{type: :quit} -> :erlang.terminate
       _ -> ball = Ball.update_x(ball, @width)
-           ball = Ball.update_y(ball, @height)
-           ball = Ball.update_x_vel(ball, @width)
-           ball = Ball.update_y_vel(ball, @height)
+           |> Ball.update_y(@height)
+           |> Ball.update_x_vel(@width)
+           |> Ball.update_y_vel(@height)
            loop(renderer, ball)
     end
   end
