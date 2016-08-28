@@ -9,7 +9,7 @@ defmodule Pong do
     {:ok, renderer} = :sdl_renderer.create(window, -1, [:accelerated, :present_vsync])
 
     p1 = Paddle.init("left", @width, @height)
-    p2 = Paddle.init("right", @width, @height)
+    p2 = AIPaddle.init(@width, @height)
     ball = %Ball{x: 100, y: 100, x_vel: Ball.rand_vel, y_vel: Ball.rand_vel}
 
     objects = [p1, p2, ball]
@@ -27,13 +27,19 @@ defmodule Pong do
 
     case :sdl_events.poll do
       %{type: :quit} -> :erlang.terminate
-      _ -> ball = List.last(objects)
+      _ ->
+           ball = List.last(objects)
            |> Ball.update_x(@width)
            |> Ball.update_y(@height)
            |> Ball.update_x_vel(@width)
            |> Ball.update_y_vel(@height)
 
-           objects = List.replace_at(objects, length(objects) - 1, ball)
+           ai_paddle = Enum.at(objects, 1)
+           |> AIPaddle.move_paddle(ball, @width)
+
+           objects = objects
+           |> List.replace_at(1, ai_paddle)
+           |> List.replace_at(2, ball)
            loop(renderer, objects)
     end
   end
