@@ -5,7 +5,7 @@ defmodule Pong do
   def start do
     :ok = :sdl.start([:video])
     :ok = :sdl.stop_on_exit
-    {:ok, window} = :sdl_window.create('Hello SDL', 10, 10, @width, @height, [])
+    {:ok, window} = :sdl_window.create('Pong', 10, 10, @width, @height, [])
     {:ok, renderer} = :sdl_renderer.create(window, -1, [:accelerated, :present_vsync])
 
     p1 = Paddle.init("left", @width, @height)
