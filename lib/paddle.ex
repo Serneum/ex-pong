@@ -19,11 +19,11 @@ defmodule Paddle do
     %Paddle{x: screen_width - @width - @wall_offset, y: init_y(screen_height)}
   end
 
-  def init_y(screen_height) do
-    round((screen_height / 2) - (@height / 2))
-  end
-
   def update_y(%Paddle{} = paddle) do
     Map.update!(paddle, :y, &(&1 + @vel))
+  end
+
+  defp init_y(screen_height) do
+    round((screen_height / 2) - (@height / 2))
   end
 end

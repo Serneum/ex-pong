@@ -28,15 +28,15 @@ defmodule AIPaddle do
     paddle
   end
 
-  def update_y(%Paddle{} = paddle, b_y, p_center) when p_center < (b_y - 35) do
+  defp update_y(%Paddle{} = paddle, b_y, p_center) when p_center < (b_y - 35) do
     Map.update!(paddle, :y, &(&1 + @vel))
   end
 
-  def update_y(%Paddle{} = paddle, b_y, p_center) when p_center > (b_y + 35) do
+  defp update_y(%Paddle{} = paddle, b_y, p_center) when p_center > (b_y + 35) do
     Map.update!(paddle, :y, &(&1 - @vel))
   end
 
-  def update_y(%Paddle{} = paddle, _, _) do
+  defp update_y(%Paddle{} = paddle, _, _) do
     paddle
   end
 end
