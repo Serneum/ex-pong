@@ -1,6 +1,6 @@
 defmodule Ball do
-  @height 50
-  @width 50
+  @height 10
+  @width 10
 
   defstruct [:x, :y, :x_vel, :y_vel]
 
