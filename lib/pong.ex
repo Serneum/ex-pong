@@ -37,7 +37,7 @@ defmodule Pong do
           ai_paddle = Enum.at(objects, 1)
           |> AIPaddle.move_paddle(ball, @width)
 
-          objects = List.replace_at(1, ai_paddle)
+          objects = List.replace_at(objects, 1, ai_paddle)
           |> List.replace_at(2, ball)
           loop(renderer, objects)
     end
