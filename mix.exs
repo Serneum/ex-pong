@@ -28,7 +28,8 @@ defmodule Pong.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      { :esdl2, github: 'ninenines/esdl2' }
+      { :esdl2, github: 'ninenines/esdl2' },
+      {:credo, "~> 0.4", only: [:dev, :test]}
     ]
   end
 end
