@@ -5,9 +5,8 @@ defmodule Pong do
   def start do
     :ok = :sdl.start([:video])
     :ok = :sdl.stop_on_exit
-    {:ok, window} = :sdl_window.create('Pong', 10, 10, @width, @height, [])
-    {:ok, renderer} = :sdl_renderer.create(window, -1, [:accelerated, :present_vsync])
 
+    renderer = Renderer.draw_window('Pong', @width, @height)
     p1 = Paddle.init("left", @width, @height)
     p2 = AIPaddle.init(@width, @height)
     ball = %Ball{x: 100, y: 100, x_vel: Ball.rand_vel, y_vel: Ball.rand_vel}
@@ -17,13 +16,9 @@ defmodule Pong do
   end
 
   def loop(renderer, objects) do
-    :ok = :sdl_renderer.set_draw_color(renderer, 0, 0, 0, 255)
-    :ok = :sdl_renderer.clear(renderer)
-
-    # TODO: Create a Renderer module. Objects should each have a type
-    # that determines which render method to call (?)
-    for obj <- objects, do: :ok = obj.__struct__.render(renderer, obj)
-    :ok = :sdl_renderer.present(renderer)
+    Renderer.clear_screen(renderer)
+    for obj <- objects, do: :ok = Renderer.draw(renderer, obj)
+    Renderer.render_screen(renderer)
 
     case :sdl_events.poll do
       %{type: :quit} -> :erlang.terminate
