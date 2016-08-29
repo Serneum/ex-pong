@@ -2,7 +2,10 @@ defmodule Ball do
   @height 10
   @width 10
 
-  defstruct x: nil, y: nil, x_vel: nil, y_vel: nil, width: @width, height: @height
+  defstruct [:x, :y, :x_vel, :y_vel]
+
+  def width, do: @width
+  def height, do: @height
 
   def rand_vel do
     :rand.uniform(5) - 1

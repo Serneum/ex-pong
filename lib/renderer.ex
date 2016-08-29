@@ -15,14 +15,21 @@ defmodule Renderer do
     renderer
   end
 
-  # Not a huge fan of needing to have the module structs contain width/height
-  # Seemed like the easiest way to get the data, though
-  def draw(renderer, %{x: x, y: y, width: w, height: h}) do
-    :ok = set_color(renderer, 255, 255, 255)
-    :ok = :sdl_renderer.fill_rect(renderer, %{x: x, y: y, w: w, h: h})
+  def draw(renderer, %Ball{} = ball) do
+    draw_rect(renderer, ball.x, ball.y, Ball.width, Ball.height)
   end
 
-  def set_color(renderer, r, g, b) do
+  def draw(renderer, paddle) do
+    struct = paddle.__struct__
+    draw_rect(renderer, paddle.x, paddle.y, struct.width, struct.height)
+  end
+
+  defp draw_rect(renderer, x, y, width, height) do
+    :ok = set_color(renderer, 255, 255, 255)
+    :ok = :sdl_renderer.fill_rect(renderer, %{x: x, y: y, w: width, h: height})
+  end
+
+  defp set_color(renderer, r, g, b) do
     :ok = :sdl_renderer.set_draw_color(renderer, r, g, b, 255)
   end
 end

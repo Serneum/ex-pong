@@ -4,7 +4,10 @@ defmodule Paddle do
   @vel 5
   @wall_offset 10
 
-  defstruct x: nil, y: nil, width: @width, height: @height
+  defstruct [:x, :y]
+
+  def width, do: @width
+  def height, do: @height
 
   def init("left", _, screen_height) do
     %Paddle{x: @wall_offset, y: init_y(screen_height)}
