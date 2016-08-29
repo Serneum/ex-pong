@@ -28,19 +28,18 @@ defmodule Pong do
     case :sdl_events.poll do
       %{type: :quit} -> :erlang.terminate
       _ ->
-           ball = List.last(objects)
-           |> Ball.update_x(@width)
-           |> Ball.update_y(@height)
-           |> Ball.update_x_vel(@width)
-           |> Ball.update_y_vel(@height)
+          ball = List.last(objects)
+          |> Ball.update_x(@width)
+          |> Ball.update_y(@height)
+          |> Ball.update_x_vel(@width)
+          |> Ball.update_y_vel(@height)
 
-           ai_paddle = Enum.at(objects, 1)
-           |> AIPaddle.move_paddle(ball, @width)
+          ai_paddle = Enum.at(objects, 1)
+          |> AIPaddle.move_paddle(ball, @width)
 
-           objects = objects
-           |> List.replace_at(1, ai_paddle)
-           |> List.replace_at(2, ball)
-           loop(renderer, objects)
+          objects = List.replace_at(1, ai_paddle)
+          |> List.replace_at(2, ball)
+          loop(renderer, objects)
     end
   end
 end
