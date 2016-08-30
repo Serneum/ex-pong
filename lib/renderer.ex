@@ -46,6 +46,7 @@ defmodule Renderer do
     |> List.insert_at(-1, %{x: x0 - y, y: y0 - x})
     |> List.insert_at(-1, %{x: x0 + y, y: y0 - x})
     |> List.insert_at(-1, %{x: x0 + x, y: y0 - y})
+    |> Enum.uniq
 
     new_y = y + 1
     tmp_err = err + 1 + (2 * new_y)
