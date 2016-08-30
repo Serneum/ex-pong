@@ -20,25 +20,40 @@ defmodule Pong do
     for obj <- objects, do: :ok = Renderer.draw(renderer, obj)
     Renderer.render_screen(renderer)
 
-    case :sdl_events.poll do
+    case event = :sdl_events.poll do
       %{type: :quit} -> :erlang.terminate
+      # %{type: :mouse_motion} ->
+      %{type: :key_down} ->
+        paddle = objects
+        |> List.first
+        |> Paddle.update_y(event.scancode)
+
+        objects = objects
+        |> List.replace_at(0, paddle)
+        loop(renderer, objects)
       _ ->
-          ball = objects
-          |> List.last
-          |> Ball.update_x(@width)
-          |> Ball.update_y(@height)
-          |> Ball.update_x_vel(@width)
-          |> Ball.update_y_vel(@height)
-
-          ai_paddle = objects
-          |> Enum.at(1)
-          |> AIPaddle.move_paddle(ball, @width)
-
-          objects = objects
-          |> List.replace_at(1, ai_paddle)
-          |> List.replace_at(2, ball)
-          loop(renderer, objects)
+        objects = update_objects(objects)
+        loop(renderer, objects)
     end
+  end
+
+  defp update_objects(objects) do
+    ball = objects
+    |> List.last
+    |> Ball.update_x(@width)
+    |> Ball.update_y(@height)
+    |> Ball.update_x_vel(@width)
+    |> Ball.update_y_vel(@height)
+
+    ai_paddle = objects
+    |> Enum.at(1)
+    |> AIPaddle.move_paddle(ball, @width)
+
+    objects = objects
+    |> List.replace_at(1, ai_paddle)
+    |> List.replace_at(2, ball)
+
+    objects
   end
 end
 
