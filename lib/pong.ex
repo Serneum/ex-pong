@@ -9,7 +9,7 @@ defmodule Pong do
     renderer = Renderer.draw_window('Pong', @width, @height)
     p1 = Paddle.init("left", @width, @height)
     p2 = AIPaddle.init(@width, @height)
-    ball = %Ball{x: 100, y: 100, x_vel: Ball.rand_vel, y_vel: Ball.rand_vel}
+    ball = Ball.init(@width, @height)
 
     objects = [p1, p2, ball]
     loop(renderer, objects)

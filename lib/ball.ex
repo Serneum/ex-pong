@@ -6,6 +6,10 @@ defmodule Ball do
   def radius, do: @radius
   def diameter, do: @radius * 2
 
+  def init(screen_width, screen_height) do
+    %Ball{x: round(screen_width / 2) - radius, y: round(screen_height / 2) - radius, x_vel: rand_vel, y_vel: rand_vel}
+  end
+
   def rand_vel do
     :rand.uniform(5) - 1
   end
