@@ -16,7 +16,7 @@ defmodule Renderer do
   end
 
   def draw(renderer, %Ball{} = ball) do
-    draw_circle(renderer, ball.x, ball.y, round(Ball.width / 2))
+    draw_circle(renderer, ball.x, ball.y, Ball.radius)
   end
 
   def draw(renderer, paddle) do
@@ -30,7 +30,8 @@ defmodule Renderer do
   end
 
   defp draw_circle(renderer, x0, y0, radius) do
-    points = midpoint_circle([], x0, radius, y0, 0, 0)
+    # Offset x and y by the radius when rendering
+    points = midpoint_circle([], x0 + radius, radius, y0 + radius, 0, 0)
     :ok = set_color(renderer, 255, 255, 255)
     :ok = :sdl_renderer.draw_points(renderer, points)
   end

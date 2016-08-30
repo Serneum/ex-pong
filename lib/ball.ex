@@ -1,30 +1,29 @@
 defmodule Ball do
-  @height 10
-  @width 10
+  @radius 5
 
   defstruct [:x, :y, :x_vel, :y_vel]
 
-  def width, do: @width
-  def height, do: @height
+  def radius, do: @radius
+  def diameter, do: @radius * 2
 
   def rand_vel do
     :rand.uniform(5) - 1
   end
 
   def update_x(%Ball{} = ball, screen_width) do
-    Map.update!(ball, :x, &(check_bounds(&1, ball.x_vel, @width, screen_width)))
+    Map.update!(ball, :x, &(check_bounds(&1, ball.x_vel, diameter, screen_width)))
   end
 
   def update_y(%Ball{} = ball, screen_height) do
-    Map.update!(ball, :y, &(check_bounds(&1, ball.y_vel, @height, screen_height)))
+    Map.update!(ball, :y, &(check_bounds(&1, ball.y_vel, diameter, screen_height)))
   end
 
   def update_x_vel(%Ball{} = ball, screen_width) do
-    Map.update!(ball, :x_vel, &(check_vel(ball.x, &1, @width, screen_width)))
+    Map.update!(ball, :x_vel, &(check_vel(ball.x, &1, diameter, screen_width)))
   end
 
   def update_y_vel(%Ball{} = ball, screen_height) do
-    Map.update!(ball, :y_vel, &(check_vel(ball.y, &1, @height, screen_height)))
+    Map.update!(ball, :y_vel, &(check_vel(ball.y, &1, diameter, screen_height)))
   end
 
   defp check_bounds(val, vel, _, _) when val + vel < 0 do
