@@ -1,5 +1,6 @@
 defmodule Ball do
-  @radius 5
+  @radius 10
+  @vel 5
 
   defstruct [:x, :y, :x_vel, :y_vel]
 
@@ -7,11 +8,23 @@ defmodule Ball do
   def diameter, do: @radius * 2
 
   def init(screen_width, screen_height) do
-    %Ball{x: round(screen_width / 2) - radius, y: round(screen_height / 2) - radius, x_vel: rand_vel, y_vel: rand_vel}
+    angle = rand_angle
+    %Ball{x: round(screen_width / 2) - radius, y: round(screen_height / 2) - radius,
+      x_vel: round(rand_vel * :math.cos(angle)), y_vel: round(rand_vel * :math.sin(angle))}
+  end
+
+  def rand_angle do
+    # Get a value between -25 and 25
+    differential = Enum.random([-1, 1]) * round(:rand.uniform * 25)
+    # Get a multiplier between 0 and 3
+    multiplier = :rand.uniform(4) - 1
+    # Get an angle between 20 and 70 degrees in any of the four quadrants
+    degrees = (45 + differential) + (90 * multiplier)
+    degrees * (:math.pi / 180)
   end
 
   def rand_vel do
-    :rand.uniform(5) - 1
+    Enum.random([-1, 1]) * @vel
   end
 
   def update_x(%Ball{} = ball, screen_width) do
