@@ -29,44 +29,11 @@ defmodule Renderer do
     :ok = :sdl_renderer.fill_rect(renderer, %{x: x, y: y, w: width, h: height})
   end
 
-  defp draw_circle(renderer, x0, y0, radius) do
+  defp draw_circle(renderer, x, y, radius) do
     # Offset x and y by the radius when rendering
-    points = midpoint_circle([], x0 + radius, radius, y0 + radius, 0, 0)
+    #points = midpoint_circle([], x0 + radius, radius, y0 + radius, 0, 0)
     :ok = set_color(renderer, 255, 255, 255)
-    :ok = :sdl_renderer.draw_points(renderer, points)
-  end
-
-  defp midpoint_circle(points, x0, x, y0, y, err) when x >= y do
-    points = points
-    |> List.insert_at(-1, %{x: x0 + x, y: y0 + y})
-    |> List.insert_at(-1, %{x: x0 + y, y: y0 + x})
-    |> List.insert_at(-1, %{x: x0 - y, y: y0 + x})
-    |> List.insert_at(-1, %{x: x0 - x, y: y0 + y})
-    |> List.insert_at(-1, %{x: x0 - x, y: y0 - y})
-    |> List.insert_at(-1, %{x: x0 - y, y: y0 - x})
-    |> List.insert_at(-1, %{x: x0 + y, y: y0 - x})
-    |> List.insert_at(-1, %{x: x0 + x, y: y0 - y})
-    |> Enum.uniq
-
-    new_y = y + 1
-    tmp_err = err + 1 + (2 * new_y)
-    values = midpoint_circle_update_values(x, tmp_err)
-
-    midpoint_circle(points, x0, values.x, y0, new_y, values.err)
-  end
-
-  defp midpoint_circle(points, _, _, _, _, _) do
-    points
-  end
-
-  defp midpoint_circle_update_values(x, err) when 2 * (err - x) + 1 > 0 do
-    new_x = x - 1
-    new_err = err + 1 - (2 * new_x)
-    %{x: new_x, err: new_err}
-  end
-
-  defp midpoint_circle_update_values(x, err) do
-    %{x: x, err: err}
+    :ok = :sdl_renderer.draw_circle(renderer, x + radius, y + radius, radius)
   end
 
   defp set_color(renderer, r, g, b) do
