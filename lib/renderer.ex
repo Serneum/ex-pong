@@ -41,11 +41,19 @@ defmodule Renderer do
     # ok = draw_lines(renderer, x0 + radius, radius, y0 + radius, 0, 0)
 
     # Draw all points contained within a circle
-    points = get_fill_points_outer(x0, x0 + radius, y0, y0 + radius, radius)
-    :ok = :sdl_renderer.draw_points(renderer, points)
+    # points = get_fill_points_outer(x0, x0 + radius, y0, y0 + radius, radius)
+    # :ok = :sdl_renderer.draw_points(renderer, points)
 
     # Draw a series of smaller circles to fill a larger circle
     # draw_circles(renderer, x0, y0, radius, 1)
+
+    # Fill a circle determined by midpoint-circle
+    # points = fill_midpoint_circle(x0 + radius, radius, 1 - (radius * 2), y0 + radius, 0, 0, 0)
+    # :ok = :sdl_renderer.draw_points(renderer, points)
+
+    # Fill using an alg from StackOverflow. Single-loop version of get_fill_points_outer
+    points = single_loop(x0 + radius, y0 + radius, radius)
+    :ok = :sdl_renderer.draw_points(renderer, points)
   end
 
   # Draw a series of smaller circles to fill a larger circle
@@ -129,6 +137,73 @@ defmodule Renderer do
 
   defp midpoint_circle_update_values(x, err) do
     %{x: x, err: err}
+  end
+
+  # Fill using midpoint cirlce algorithm
+  defp fill_midpoint_circle(x0, x, x_change, y0, y, y_change, err) when x >= y do
+    points = fill_midpoint_circle_get_x_points(x0, x, y0, y, x0 - x) ++ fill_midpoint_circle_get_y_points(x0, x, y0, y, x0 - y)
+    |> Enum.uniq
+
+    new_y = y + 1
+    tmp_err = err + y_change
+    new_y_change = y_change + 2
+    values = fill_midpoint_circle_update_values(x, x_change, tmp_err)
+
+    points ++ fill_midpoint_circle(x0, values.x, values.x_change, y0, new_y, new_y_change, values.err)
+  end
+
+  defp fill_midpoint_circle(_, _, _, _, _, _, _) do
+    []
+  end
+
+  defp fill_midpoint_circle_get_x_points(x0, x, y0, y, iter) when iter <= x0 + x do
+    [%{x: iter, y: y0 + y}, %{x: iter, y: y0 - y}] ++ fill_midpoint_circle_get_x_points(x0, x, y0, y, iter + 1)
+  end
+
+  defp fill_midpoint_circle_get_x_points(_, _, _, _, _) do
+    []
+  end
+
+  defp fill_midpoint_circle_get_y_points(x0, x, y0, y, iter) when iter <= x0 + y do
+    [%{x: iter, y: y0 + x}, %{x: iter, y: y0 - x}] ++ fill_midpoint_circle_get_y_points(x0, x, y0, y, iter + 1)
+  end
+
+  defp fill_midpoint_circle_get_y_points(_, _, _, _, _) do
+    []
+  end
+
+  defp fill_midpoint_circle_update_values(x, x_change, err) when 2 * err + x_change > 0 do
+    new_x = x - 1
+    new_err = err + x_change
+    new_x_change = x_change + 2
+    %{x: new_x, x_change: new_x_change, err: new_err}
+  end
+
+  defp fill_midpoint_circle_update_values(x, x_change, err) do
+    %{x: x, x_change: x_change, err: err}
+  end
+
+  # Single loop solution (http://stackoverflow.com/a/24453110)
+  defp single_loop(x, y, radius) do
+    [%{x: x, y: y}] ++ single_loop_points(x, y, radius, 0)
+  end
+
+  defp single_loop_points(x, y, radius, iter) when iter < (radius * radius * 4) do
+    diameter = radius * 2
+
+    tx = round((rem iter, diameter) - radius)
+    ty = round((iter / diameter) - radius)
+    points = if (tx * tx + ty * ty < radius * radius) do
+      [%{x: x + tx, y: y + ty}]
+    else
+      []
+    end
+
+    points ++ single_loop_points(x, y, radius, iter + 1)
+  end
+
+  defp single_loop_points(_, _, _, _) do
+    []
   end
 
   defp set_color(renderer, r, g, b) do
