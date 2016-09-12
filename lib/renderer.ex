@@ -38,7 +38,7 @@ defmodule Renderer do
     # :ok = :sdl_renderer.draw_points(renderer, points)
 
     # Draw lines between points from the midpoint-cirlce algorithm to fill the circle
-    # ok = draw_lines(renderer, x0 + radius, radius, y0 + radius, 0, 0)
+    :ok = draw_lines(renderer, x0 + radius, radius, y0 + radius, 0, 0)
 
     # Draw all points contained within a circle
     # points = get_fill_points_outer(x0, x0 + radius, y0, y0 + radius, radius)
@@ -52,8 +52,8 @@ defmodule Renderer do
     # :ok = :sdl_renderer.draw_points(renderer, points)
 
     # Fill using an alg from StackOverflow. Single-loop version of get_fill_points_outer
-    points = single_loop(x0 + radius, y0 + radius, radius)
-    :ok = :sdl_renderer.draw_points(renderer, points)
+    # points = single_loop(x0 + radius, y0 + radius, radius)
+    # :ok = :sdl_renderer.draw_points(renderer, points)
   end
 
   # Draw a series of smaller circles to fill a larger circle
@@ -63,43 +63,35 @@ defmodule Renderer do
     draw_circles(renderer, x, y, radius, curr_radius + 1)
   end
 
-  defp draw_circles(_, _, _, _, _) do
-    :ok
-  end
+  defp draw_circles(_, _, _, _, _), do: :ok
 
   # Draw all points contained within a circle
   defp get_fill_points_outer(x, xCenter, y, yCenter, radius) when x <= xCenter do
     get_fill_points_inner(x, xCenter, y, yCenter, radius) ++ get_fill_points_outer(x + 1, xCenter, y, yCenter, radius)
   end
 
-  defp get_fill_points_outer(_, _, _, _, _) do
-    []
-  end
+  defp get_fill_points_outer(_, _, _, _, _), do: []
 
- defp get_fill_points_inner(x, xCenter, y, yCenter, radius) when y <= yCenter do
+  defp get_fill_points_inner(x, xCenter, y, yCenter, radius) when y <= yCenter do
     get_fill_points(x, xCenter, y, yCenter, radius) ++ get_fill_points_inner(x, xCenter, y + 1, yCenter, radius)
   end
 
-  defp get_fill_points_inner(_, _, _, _, _) do
-    []
-  end
+  defp get_fill_points_inner(_, _, _, _, _), do: []
 
- defp get_fill_points(x, xCenter, y, yCenter, radius) when (x - xCenter) * (x - xCenter) + (y - yCenter) * (y - yCenter) < radius * radius do
+  defp get_fill_points(x, xCenter, y, yCenter, radius) when (x - xCenter) * (x - xCenter) + (y - yCenter) * (y - yCenter) < radius * radius do
     xSym = xCenter - (x - xCenter)
     ySym = yCenter - (y - yCenter)
     [%{x: x, y: y}, %{x: x, y: ySym}, %{x: xSym, y: y}, %{x: xSym, y: ySym}]
   end
 
-  defp get_fill_points(_, _, _, _, _) do
-    []
-  end
+  defp get_fill_points(_, _, _, _, _), do: []
 
   # Draw lines between points from the midpoint-cirlce algorithm to fill the circle
   defp draw_lines(renderer, x0, x, y0, y, err) when x >= y do
-    :sdl_renderer.draw_line(renderer, %{x: x0 + x, y: y0 + y}, %{x: x0 - x, y: y0 - y})
-    :sdl_renderer.draw_line(renderer, %{x: x0 + y, y: y0 + x}, %{x: x0 - y, y: y0 - x})
-    :sdl_renderer.draw_line(renderer, %{x: x0 - y, y: y0 + x}, %{x: x0 + y, y: y0 - x})
-    :sdl_renderer.draw_line(renderer, %{x: x0 - x, y: y0 + y}, %{x: x0 + x, y: y0 - y})
+    :sdl_renderer.draw_line(renderer, %{x: x0 + x, y: y0 + y}, %{x: x0 - x, y: y0 + y})
+    :sdl_renderer.draw_line(renderer, %{x: x0 + y, y: y0 + x}, %{x: x0 - y, y: y0 + x})
+    :sdl_renderer.draw_line(renderer, %{x: x0 - x, y: y0 - y}, %{x: x0 + x, y: y0 - y})
+    :sdl_renderer.draw_line(renderer, %{x: x0 - y, y: y0 - x}, %{x: x0 + y, y: y0 - x})
 
     new_y = y + 1
     tmp_err = err + 1 + (2 * new_y)
@@ -188,7 +180,7 @@ defmodule Renderer do
     [%{x: x, y: y}] ++ single_loop_points(x, y, radius, 0)
   end
 
-  defp single_loop_points(x, y, radius, iter) when iter < (radius * radius * 4) do
+  defp single_loop_points(x, y, radius, iter) when iter <= (radius * radius * 4) do
     diameter = radius * 2
 
     tx = round((rem iter, diameter) - radius)
