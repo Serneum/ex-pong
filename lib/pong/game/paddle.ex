@@ -3,7 +3,7 @@ defmodule Pong.Game.Paddle do
 
   @height 100
   @width 10
-  @vel 10
+  @vel 15
   @wall_offset 10
 
   defstruct [:x, :y]
