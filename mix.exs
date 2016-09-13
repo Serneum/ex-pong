@@ -2,12 +2,15 @@ defmodule Pong.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :pong,
-     version: "0.1.0",
-     elixir: "~> 1.3",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      app: :pong,
+      version: "0.1.0",
+      elixir: "~> 1.3",
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      deps: deps(),
+      aliases: aliases
+    ]
   end
 
   # Configuration for the OTP application
@@ -17,6 +20,12 @@ defmodule Pong.Mixfile do
     [
       mod: {Pong, []},
       applications: [:logger]
+    ]
+  end
+
+  defp aliases do
+    [
+      run: "run --no-halt"
     ]
   end
 
