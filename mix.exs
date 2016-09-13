@@ -29,7 +29,7 @@ defmodule Pong.Mixfile do
   defp deps do
     [
       { :esdl2, github: 'Serneum/esdl2' },
-      {:credo, "~> 0.4", only: [:dev, :test]}
+      { :credo, "~> 0.4", only: [:dev, :test] }
     ]
   end
 end

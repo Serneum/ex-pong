@@ -33,7 +33,7 @@ defmodule Renderer do
     # Offset x and y by the radius when rendering
     #points = midpoint_circle([], x0 + radius, radius, y0 + radius, 0, 0)
     :ok = set_color(renderer, 255, 255, 255)
-    :ok = :sdl_renderer.draw_circle(renderer, x + radius, y + radius, radius)
+    :ok = :sdl_renderer.fill_circle(renderer, x + radius, y + radius, radius)
   end
 
   defp set_color(renderer, r, g, b) do
