@@ -43,9 +43,11 @@ defmodule Pong.Game do
   def handle_cast(:stop, _state) do
     {:stop, :normal, :shutdown_ok, []}
   end
+
   def handle_cast(:tick, state) do
     {:noreply, tick_game(state)}
   end
+
   def handle_cast({:handle_input, input}, state) do
     {:noreply, Interaction.handle_input(state, input)}
   end

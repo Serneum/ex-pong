@@ -28,9 +28,10 @@ defmodule Pong.Sdl.Window do
 
   def loop(game, renderer) do
     state = Game.get_state(game)
-    case :sdl_events.poll do
+    case event = :sdl_events.poll do
       false -> :ok
       %{type: :quit} -> terminate
+      %{type: :key_down} -> Game.handle_input(game, event.scancode)
       _ -> loop(game, renderer)
     end
 
@@ -38,8 +39,6 @@ defmodule Pong.Sdl.Window do
       :tick ->
         Renderer.draw(state, renderer)
         loop(game, renderer)
-      event ->
-        loop(state, renderer)
     end
   end
 
