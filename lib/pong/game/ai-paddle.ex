@@ -1,4 +1,7 @@
-defmodule AIPaddle do
+defmodule Pong.Game.AIPaddle do
+  alias Pong.Game.Ball
+  alias Pong.Game.Paddle
+
   @height 100
   @width 10
   @vel 5

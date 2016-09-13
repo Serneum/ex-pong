@@ -1,7 +1,9 @@
-defmodule Paddle do
+defmodule Pong.Game.Paddle do
+  alias Pong.Game.Paddle
+
   @height 100
   @width 10
-  @vel 15
+  @vel 10
   @wall_offset 10
 
   defstruct [:x, :y]
@@ -18,12 +20,12 @@ defmodule Paddle do
   end
 
   # When pressing W (26) or Up (82)
-  def update_y(%Paddle{} = paddle, key) when key == 26 or key == 82 do
+  def update_y(%Paddle{} = paddle, :up) do
     Map.update!(paddle, :y, &(&1 - @vel))
   end
 
   # When pressing S (22) or Down (81)
-  def update_y(%Paddle{} = paddle, key) when key == 22 or key == 81 do
+  def update_y(%Paddle{} = paddle, :down) do
     Map.update!(paddle, :y, &(&1 + @vel))
   end
 

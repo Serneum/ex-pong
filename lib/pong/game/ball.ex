@@ -1,4 +1,6 @@
-defmodule Ball do
+defmodule Pong.Game.Ball do
+  alias Pong.Game.Ball
+
   @radius 10
   @vel 5
 

@@ -1,8 +1,25 @@
-defmodule Renderer do
+defmodule Pong.Sdl.Renderer do
+  alias Pong.Game.Ball
+
+  def draw(state, renderer) do
+    clear_screen(renderer)
+    do_draw(state, renderer)
+  end
 
   def clear_screen(renderer) do
     :ok = set_color(renderer, 0, 0, 0)
     :ok = :sdl_renderer.clear(renderer)
+  end
+
+  def do_draw(state, renderer) do
+    draw_frame(renderer, state)
+    render_screen(renderer)
+  end
+
+  def draw_frame(renderer, state) do
+    draw_object(renderer, Map.get(state, :p1))
+    draw_object(renderer, Map.get(state, :p2))
+    draw_object(renderer, Map.get(state, :ball))
   end
 
   def render_screen(renderer) do
@@ -15,11 +32,11 @@ defmodule Renderer do
     renderer
   end
 
-  def draw(renderer, %Ball{} = ball) do
+  defp draw_object(renderer, %Ball{} = ball) do
     draw_circle(renderer, ball.x, ball.y, Ball.radius)
   end
 
-  def draw(renderer, paddle) do
+  defp draw_object(renderer, paddle) do
     struct = paddle.__struct__
     draw_rect(renderer, paddle.x, paddle.y, struct.width, struct.height)
   end
@@ -40,3 +57,4 @@ defmodule Renderer do
     :ok = :sdl_renderer.set_draw_color(renderer, r, g, b, 255)
   end
 end
+
